@@ -1,13 +1,13 @@
 <script>
 import {
-     ArrowUpIcon ,
+  ArrowUpIcon,
   MonitorIcon,
   FeatherIcon,
   EyeIcon,
   UserCheckIcon,
   SmartphoneIcon,
   HeartIcon,
-     } from "vue-feather-icons";
+} from "vue-feather-icons";
 import { Carousel, Slide } from "vue-carousel";
 import countTo from "vue-count-to";
 
@@ -20,8 +20,19 @@ import Footer from "@/components/footer";
  */
 export default {
   data() {
-    return {};
-  },
+  const releasesUrl = "https://github.com/crypto-power/cryptopower/releases";
+  return {
+    // Initialize data properties for all download links
+    macAmdUrl: releasesUrl,
+    macArmUrl: releasesUrl,
+    linuxAmdUrl: releasesUrl,
+    linuxArmUrl: releasesUrl,
+    windows64Url: releasesUrl,
+    windows32Url: releasesUrl,
+    freebsdUrl: releasesUrl,
+    androidApkUrl: releasesUrl,
+  };
+},
   components: {
     Navbar,
     Switcher,
@@ -30,14 +41,40 @@ export default {
     Slide,
     ArrowUpIcon,
     countTo,
-    Carousel,
-    Slide,
     MonitorIcon,
     FeatherIcon,
     EyeIcon,
     UserCheckIcon,
     SmartphoneIcon,
     HeartIcon,
+  },
+  mounted() {
+    const owner = 'crypto-power';
+    const repo = 'cryptopower';
+    const apiUrl = `https://api.github.com/repos/${owner}/${repo}/releases/latest`;
+
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`GitHub API error: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Update data properties based on asset names
+        this.macAmdUrl = data.assets.find(asset => asset.name.endsWith('macos-amd64.zip'))?.browser_download_url || this.macAmdUrl;
+        this.macArmUrl = data.assets.find(asset => asset.name.endsWith('macos-arm64.zip'))?.browser_download_url || this.macArmUrl;
+        this.linuxAmdUrl = data.assets.find(asset => asset.name.endsWith('linux-amd64.tar.gz'))?.browser_download_url || this.linuxAmdUrl;
+        this.linuxArmUrl = data.assets.find(asset => asset.name.endsWith('linux-arm64.tar.gz'))?.browser_download_url || this.linuxArmUrl;
+        this.windows64Url = data.assets.find(asset => asset.name.endsWith('windows-amd64.zip'))?.browser_download_url || this.windows64Url;
+        this.windows32Url = data.assets.find(asset => asset.name.endsWith('windows-386.zip'))?.browser_download_url || this.windows32Url;
+        this.freebsdUrl = data.assets.find(asset => asset.name.endsWith('freebsd-amd64.zip'))?.browser_download_url || this.freebsdUrl;
+        this.androidApkUrl = data.assets.find(asset => asset.name.endsWith('.apk'))?.browser_download_url || this.androidApkUrl;
+
+      })
+      .catch(error => {
+        console.error('Failed to fetch the latest release:', error);
+      });
   },
 };
 </script>
@@ -442,55 +479,66 @@ export default {
     <!-- Feature End -->
 
      <!-- Download cta start -->
-    <section id="downloads" class="section">
-      <div class="container">
+    <template>
+      <section id="downloads" class="section">
+        <div class="container">
 
-        <div
-          class="row mt-md-5 pt-md-3 mt-4 pt-2 mt-sm-0 pt-sm-0 justify-content-center"
-        >
-          <div class="col-12 text-center">
-            <div class="section-title">
-              <h4 class="title mb-4">Download Cryptopower Wallet</h4>
-              <p class="text-muted para-desc mx-auto">
-                Choose the right version for your operating system and install Cryptopower Wallet to securely manage, send, and exchange your crypto with ease anytime, anywhere.
-              </p>
-              <div class="mt-4">
-                <a class="" href="https://github.com/crypto-power/cryptopower/releases"
-                    target="_blank">Mac OS ↓ <span style="margin-left: 5px;">| </span></a>
-                <a class=""
-                    href="https://github.com/crypto-power/cryptopower/releases"
-                    target="_blank">Linux ↓ <span style="margin-left: 5px;">| </span></a>
-                <a class="add-margin"
-                    href="https://github.com/crypto-power/cryptopower/releases"
-                    target="_blank">Windows ↓ <span style="margin-left: 5px;">| </span></a>
-                <a class="add-margin"
-                    href="https://github.com/crypto-power/cryptopower/releases"
-                    target="_blank">FreeBSD ↓ <span style="margin-left: 5px;">| </span></a>
-                    <a class="add-margin"
-                    href="https://github.com/crypto-power/cryptopower/releases"
-                    target="_blank">Android (APK) ↓ <span style="margin-left: 5px;">| </span></a>
-                <a class="add-margin" href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Release Notes
-                    →</a>
-              </div>
+          <div
+            class="row mt-md-5 pt-md-3 mt-4 pt-2 mt-sm-0 pt-sm-0 justify-content-center"
+          >
+            <div class="col-12 text-center">
+              <div class="section-title">
+                <h4 class="title mb-4">Download Cryptopower Wallet</h4>
+                <p class="text-muted para-desc mx-auto">
+                  Choose the right version for your operating system and install Cryptopower Wallet to securely manage, send, and exchange your crypto with ease anytime, anywhere.
+                </p>
+                <div class="mt-4">
+                  <b-dropdown text="Mac OS ↓" variant="link" class="d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
+                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download AMD</b-dropdown-item>
+                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download ARM</b-dropdown-item>
+                  </b-dropdown>
+                  <span class="mx-2">|</span>
+                  <b-dropdown text="Linux ↓" variant="link" class="d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
+                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download AMD</b-dropdown-item>
+                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download ARM</b-dropdown-item>
+                  </b-dropdown>
+                  <span class="mx-2">|</span>
+                  <b-dropdown text="Windows ↓" variant="link" class="add-margin d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
+                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download 64bit</b-dropdown-item>
+                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download 32bit</b-dropdown-item>
+                  </b-dropdown>
+                  <span class="mx-2">|</span>
+                  <b-dropdown text="FreeBSD ↓" variant="link" class="add-margin d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
+                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download</b-dropdown-item>
+                  </b-dropdown>
+                  <span class="mx-2">|</span>
+                  <b-dropdown text="Android (APK) ↓" variant="link" class="add-margin d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
+                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download APK</b-dropdown-item>
+                  </b-dropdown>
+                  <span class="mx-2">|</span>
+                  <a class="add-margin" href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Release Notes →</a>
+                </div>
 
-              <div class="mt-4">
-                <a href="javascript:void(0)" class="btn btn-primary mt-2 mr-2"
-                  ><i class="mdi mdi-apple"></i> App Store</a
-                >
-                <a
-                  href="javascript:void(0)"
-                  class="btn btn-outline-primary mt-2"
-                  ><i class="mdi mdi-google-play"></i> Play Store</a
-                >
+                <div class="mt-4">
+                  <a href="javascript:void(0)" class="btn btn-primary mt-2 mr-2"
+                    ><i class="mdi mdi-apple"></i> App Store</a
+                  >
+                  <a
+                    href="javascript:void(0)"
+                    class="btn btn-outline-primary mt-2"
+                    ><i class="mdi mdi-google-play"></i> Play Store</a
+                  >
+                </div>
               </div>
             </div>
+            <!--end col-->
           </div>
-          <!--end col-->
+          <!--end row-->
         </div>
-        <!--end row-->
-      </div>
-      <!--end container-->
-    </section>
+        <!--end container-->
+      </section>
+    </template>
+    
     <!--end section-->
     <!-- Section End -->
 
