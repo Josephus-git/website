@@ -49,9 +49,7 @@ export default {
     HeartIcon,
   },
   mounted() {
-    const owner = 'crypto-power';
-    const repo = 'cryptopower';
-    const apiUrl = `https://api.github.com/repos/${owner}/${repo}/releases/latest`;
+    const apiUrl = `https://api.github.com/repos/crypto-power/cryptopower/releases/latest`;
 
     fetch(apiUrl)
       .then(response => {
@@ -62,13 +60,13 @@ export default {
       })
       .then(data => {
         // Update data properties based on asset names
-        this.macAmdUrl = data.assets.find(asset => asset.name.endsWith('macos-amd64.zip'))?.browser_download_url || this.macAmdUrl;
-        this.macArmUrl = data.assets.find(asset => asset.name.endsWith('macos-arm64.zip'))?.browser_download_url || this.macArmUrl;
-        this.linuxAmdUrl = data.assets.find(asset => asset.name.endsWith('linux-amd64.tar.gz'))?.browser_download_url || this.linuxAmdUrl;
-        this.linuxArmUrl = data.assets.find(asset => asset.name.endsWith('linux-arm64.tar.gz'))?.browser_download_url || this.linuxArmUrl;
-        this.windows64Url = data.assets.find(asset => asset.name.endsWith('windows-amd64.zip'))?.browser_download_url || this.windows64Url;
-        this.windows32Url = data.assets.find(asset => asset.name.endsWith('windows-386.zip'))?.browser_download_url || this.windows32Url;
-        this.freebsdUrl = data.assets.find(asset => asset.name.endsWith('freebsd-amd64.zip'))?.browser_download_url || this.freebsdUrl;
+        this.macAmdUrl = data.assets.find(asset => asset.name.startsWith('cryptopower-darwin-amd64'))?.browser_download_url || this.macAmdUrl; //this.macAmdUrl is a fallback value if url not found
+        this.macArmUrl = data.assets.find(asset => asset.name.startsWith('cryptopower-darwin-arm64'))?.browser_download_url || this.macArmUrl;
+        this.linuxAmdUrl = data.assets.find(asset => asset.name.startsWith('cryptopower-linux-amd64'))?.browser_download_url || this.linuxAmdUrl;
+        this.linuxArmUrl = data.assets.find(asset => asset.name.startsWith('cryptopower-linux-arm64'))?.browser_download_url || this.linuxArmUrl;
+        this.windows64Url = data.assets.find(asset => asset.name.startsWith('cryptopower-windows-amd64'))?.browser_download_url || this.windows64Url;
+        this.windows32Url = data.assets.find(asset => asset.name.startsWith('cryptopower-windows-386'))?.browser_download_url || this.windows32Url;
+        this.freebsdUrl = data.assets.find(asset => asset.name.startsWith('nil'))?.browser_download_url || this.freebsdUrl; // TODO: update actual freebsd url
         this.androidApkUrl = data.assets.find(asset => asset.name.endsWith('.apk'))?.browser_download_url || this.androidApkUrl;
 
       })
@@ -494,18 +492,18 @@ export default {
                 </p>
                 <div class="mt-4">
               <b-dropdown text="Mac OS ↓" variant="link" class="d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
-                <b-dropdown-item :href="macAmdUrl" target="_blank">Download AMD</b-dropdown-item>
-                <b-dropdown-item :href="macArmUrl" target="_blank">Download ARM</b-dropdown-item>
+                <b-dropdown-item :href="macAmdUrl" >Download AMD</b-dropdown-item>
+                <b-dropdown-item :href="macArmUrl" >Download ARM</b-dropdown-item>
               </b-dropdown>
               <span class="mx-2">|</span>
               <b-dropdown text="Linux ↓" variant="link" class="d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
-                <b-dropdown-item :href="linuxAmdUrl" target="_blank">Download AMD</b-dropdown-item>
-                <b-dropdown-item :href="linuxArmUrl" target="_blank">Download ARM</b-dropdown-item>
+                <b-dropdown-item :href="linuxAmdUrl" >Download AMD</b-dropdown-item>
+                <b-dropdown-item :href="linuxArmUrl" >Download ARM</b-dropdown-item>
               </b-dropdown>
               <span class="mx-2">|</span>
               <b-dropdown text="Windows ↓" variant="link" class="add-margin d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
-                <b-dropdown-item :href="windows64Url" target="_blank">Download 64bit</b-dropdown-item>
-                <b-dropdown-item :href="windows32Url" target="_blank">Download 32bit</b-dropdown-item>
+                <b-dropdown-item :href="windows64Url" >Download 64bit</b-dropdown-item>
+                <b-dropdown-item :href="windows32Url" >Download 32bit</b-dropdown-item>
               </b-dropdown>
               <span class="mx-2">|</span>
               <b-dropdown text="FreeBSD ↓" variant="link" class="add-margin d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
@@ -513,7 +511,7 @@ export default {
               </b-dropdown>
               <span class="mx-2">|</span>
               <b-dropdown text="Android (APK) ↓" variant="link" class="add-margin d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
-                <b-dropdown-item :href="androidApkUrl" target="_blank">Download APK</b-dropdown-item>
+                <b-dropdown-item :href="androidApkUrl" >Download APK</b-dropdown-item>
               </b-dropdown>
               <span class="mx-2">|</span>
               <a class="add-margin" href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Release Notes →</a>
@@ -583,7 +581,7 @@ export default {
                             <br><br> The app is built using Gio, a Golang library that facilitates the implementation of cross-platform immediate mode user interfaces. 
                             By leveraging a tightly integrated Golang codebase, Cryptopower delivers a native app experience that is smaller, faster, and more efficient for the Decred ecosystem.
 
-</p>
+                        </p>
                       </b-card-body>
                     </b-collapse>
                   </b-card>
