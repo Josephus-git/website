@@ -493,31 +493,31 @@ export default {
                   Choose the right version for your operating system and install Cryptopower Wallet to securely manage, send, and exchange your crypto with ease anytime, anywhere.
                 </p>
                 <div class="mt-4">
-                  <b-dropdown text="Mac OS ↓" variant="link" class="d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
-                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download AMD</b-dropdown-item>
-                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download ARM</b-dropdown-item>
-                  </b-dropdown>
-                  <span class="mx-2">|</span>
-                  <b-dropdown text="Linux ↓" variant="link" class="d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
-                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download AMD</b-dropdown-item>
-                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download ARM</b-dropdown-item>
-                  </b-dropdown>
-                  <span class="mx-2">|</span>
-                  <b-dropdown text="Windows ↓" variant="link" class="add-margin d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
-                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download 64bit</b-dropdown-item>
-                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download 32bit</b-dropdown-item>
-                  </b-dropdown>
-                  <span class="mx-2">|</span>
-                  <b-dropdown text="FreeBSD ↓" variant="link" class="add-margin d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
-                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download</b-dropdown-item>
-                  </b-dropdown>
-                  <span class="mx-2">|</span>
-                  <b-dropdown text="Android (APK) ↓" variant="link" class="add-margin d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
-                      <b-dropdown-item href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Download APK</b-dropdown-item>
-                  </b-dropdown>
-                  <span class="mx-2">|</span>
-                  <a class="add-margin" href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Release Notes →</a>
-                </div>
+              <b-dropdown text="Mac OS ↓" variant="link" class="d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
+                <b-dropdown-item :href="macAmdUrl" target="_blank">Download AMD</b-dropdown-item>
+                <b-dropdown-item :href="macArmUrl" target="_blank">Download ARM</b-dropdown-item>
+              </b-dropdown>
+              <span class="mx-2">|</span>
+              <b-dropdown text="Linux ↓" variant="link" class="d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
+                <b-dropdown-item :href="linuxAmdUrl" target="_blank">Download AMD</b-dropdown-item>
+                <b-dropdown-item :href="linuxArmUrl" target="_blank">Download ARM</b-dropdown-item>
+              </b-dropdown>
+              <span class="mx-2">|</span>
+              <b-dropdown text="Windows ↓" variant="link" class="add-margin d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
+                <b-dropdown-item :href="windows64Url" target="_blank">Download 64bit</b-dropdown-item>
+                <b-dropdown-item :href="windows32Url" target="_blank">Download 32bit</b-dropdown-item>
+              </b-dropdown>
+              <span class="mx-2">|</span>
+              <b-dropdown text="FreeBSD ↓" variant="link" class="add-margin d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
+                <b-dropdown-item :href="freebsdUrl" target="_blank">Download</b-dropdown-item>
+              </b-dropdown>
+              <span class="mx-2">|</span>
+              <b-dropdown text="Android (APK) ↓" variant="link" class="add-margin d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
+                <b-dropdown-item :href="androidApkUrl" target="_blank">Download APK</b-dropdown-item>
+              </b-dropdown>
+              <span class="mx-2">|</span>
+              <a class="add-margin" href="https://github.com/crypto-power/cryptopower/releases" target="_blank">Release Notes →</a>
+            </div>
 
                 <div class="mt-4">
                   <a href="javascript:void(0)" class="btn btn-primary mt-2 mr-2"
