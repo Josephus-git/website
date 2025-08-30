@@ -20,19 +20,20 @@ import Footer from "@/components/footer";
  */
 export default {
   data() {
-  const releasesUrl = "https://github.com/crypto-power/cryptopower/releases";
-  return {
-    // Initialize data properties for all download links
-    macAmdUrl: releasesUrl,
-    macArmUrl: releasesUrl,
-    linuxAmdUrl: releasesUrl,
-    linuxArmUrl: releasesUrl,
-    windows64Url: releasesUrl,
-    windows32Url: releasesUrl,
-    freebsdUrl: releasesUrl,
-    androidApkUrl: releasesUrl,
-  };
-},
+    const releasesUrl = "https://github.com/crypto-power/cryptopower/releases";
+    return {
+      // Initialize data properties for all download links
+      macAmdUrl: releasesUrl,
+      macArmUrl: releasesUrl,
+      linuxAmdUrl: releasesUrl,
+      linuxArmUrl: releasesUrl,
+      windows64Url: releasesUrl,
+      windows32Url: releasesUrl,
+      freebsdAmdUrl: releasesUrl,
+      freebsd32Url: releasesUrl,
+      androidApkUrl: releasesUrl,
+    };
+  },
   components: {
     Navbar,
     Switcher,
@@ -49,7 +50,20 @@ export default {
     HeartIcon,
   },
   mounted() {
-    const apiUrl = `https://api.github.com/repos/crypto-power/cryptopower/releases/latest`;
+    const apiUrl = `https://api.github.com/repos/crypto-power/cryptopower/releases`;
+    
+    // A mapping of data properties to their corresponding asset name prefixes/suffixes.
+    const assetMap = {
+      macAmdUrl: (assetName) => assetName.startsWith('cryptopower-darwin-amd64'),
+      macArmUrl: (assetName) => assetName.startsWith('cryptopower-darwin-arm64'),
+      linuxAmdUrl: (assetName) => assetName.startsWith('cryptopower-linux-amd64'),
+      linuxArmUrl: (assetName) => assetName.startsWith('cryptopower-linux-arm64'),
+      windows64Url: (assetName) => assetName.startsWith('cryptopower-windows-amd64'),
+      windows32Url: (assetName) => assetName.startsWith('cryptopower-windows-386'),
+      freebsdAmdUrl: (assetName) => assetName.startsWith('cryptopower-freebsd-amd64'),
+      freebsd32Url: (assetName) => assetName.startsWith('cryptopower-freebsd-386'),
+      androidApkUrl: (assetName) => assetName.endsWith('.apk'),
+    };
 
     fetch(apiUrl)
       .then(response => {
@@ -59,16 +73,27 @@ export default {
         return response.json();
       })
       .then(data => {
-        // Update data properties based on asset names
-        this.macAmdUrl = data.assets.find(asset => asset.name.startsWith('cryptopower-darwin-amd64'))?.browser_download_url || this.macAmdUrl; //this.macAmdUrl is a fallback value if url not found
-        this.macArmUrl = data.assets.find(asset => asset.name.startsWith('cryptopower-darwin-arm64'))?.browser_download_url || this.macArmUrl;
-        this.linuxAmdUrl = data.assets.find(asset => asset.name.startsWith('cryptopower-linux-amd64'))?.browser_download_url || this.linuxAmdUrl;
-        this.linuxArmUrl = data.assets.find(asset => asset.name.startsWith('cryptopower-linux-arm64'))?.browser_download_url || this.linuxArmUrl;
-        this.windows64Url = data.assets.find(asset => asset.name.startsWith('cryptopower-windows-amd64'))?.browser_download_url || this.windows64Url;
-        this.windows32Url = data.assets.find(asset => asset.name.startsWith('cryptopower-windows-386'))?.browser_download_url || this.windows32Url;
-        this.freebsdUrl = data.assets.find(asset => asset.name.startsWith('nil'))?.browser_download_url || this.freebsdUrl; // TODO: update actual freebsd url
-        this.androidApkUrl = data.assets.find(asset => asset.name.endsWith('.apk'))?.browser_download_url || this.androidApkUrl;
+        // Sort the releases array by 'published_at' date in descending order.
+        const sortedReleases = data.sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
 
+        // Create a function to find the latest download URL for a given asset type.
+        const findLatestAssetUrl = (isMatchingAsset) => {
+          for (const release of sortedReleases) {
+            const asset = release.assets.find(a => isMatchingAsset(a.name));
+            if (asset) {
+              return asset.browser_download_url;
+            }
+          }
+          return null; // Return null if no asset is found across all releases
+        };
+
+        // Use the function to find and set the URLs for each platform.
+        for (const [prop, matcherFunc] of Object.entries(assetMap)) {
+          const url = findLatestAssetUrl(matcherFunc);
+          if (url) {
+            this[prop] = url;
+          }
+        }
       })
       .catch(error => {
         console.error('Failed to fetch the latest release:', error);
@@ -507,7 +532,8 @@ export default {
               </b-dropdown>
               <span class="mx-2">|</span>
               <b-dropdown text="FreeBSD ↓" variant="link" class="add-margin d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
-                <b-dropdown-item :href="freebsdUrl" target="_blank">Download</b-dropdown-item>
+                <b-dropdown-item :href="freebsd32Url" >Download 32bit</b-dropdown-item>
+                <b-dropdown-item :href="freebsdAmdUrl" >Download AMD</b-dropdown-item>
               </b-dropdown>
               <span class="mx-2">|</span>
               <b-dropdown text="Android (APK) ↓" variant="link" class="add-margin d-inline-block" toggle-class="text-decoration-none p-0" no-caret>
